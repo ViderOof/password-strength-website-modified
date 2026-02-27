@@ -4,11 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Contact — PSM</title>
-  <link rel="stylesheet" href="../style-base.css" />
+ <link rel="stylesheet" href="../public/style-base.css" />
+<link rel="stylesheet" href="style-contact.css" />
   <style>
     main { padding: 60px 0 80px; }
 
-    /* ── Hero ── */
+    
     .contact-hero {
       text-align: center;
       max-width: 560px;
@@ -40,7 +41,7 @@
       line-height: 1.7;
     }
 
-    /* ── Layout ── */
+   
     .contact-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -49,7 +50,7 @@
       animation: fadeUp 0.5s 0.1s cubic-bezier(0.4,0,0.2,1) both;
     }
 
-    /* ── Form card ── */
+    
     .form-card {
       background: rgba(255,255,255,0.055);
       border: 1px solid rgba(255,255,255,0.10);
@@ -136,7 +137,7 @@
       min-height: 18px;
     }
 
-    /* ── Side cards ── */
+    
     .side-cards {
       display: flex;
       flex-direction: column;
@@ -160,7 +161,7 @@
       color: rgba(255,255,255,0.85);
     }
 
-    /* social links */
+    
     .social-links {
       display: flex;
       flex-direction: column;
@@ -243,29 +244,27 @@
         <span>PSC</span>
         <span class="badge">@n0rby90</span>
       </div>
-      <nav class="nav-links">
-        <a class="btn ghost" href="/">Home</a>
-        <a class="btn ghost" href="/about">About</a>
-        <a class="btn ghost" href="/contact">Contact</a>
-        <a class="btn" href="/login">Login</a>
-        <a class="btn primary" href="/signup">Sign up</a>
-      </nav>
+      <a class="btn ghost" href="/public/index.html">Home</a>
+<a class="btn ghost" href="/about/about.html">About</a>
+<a class="btn ghost" href="/contact/contact.html">Contact</a>
+<a class="btn" href="/login/login.html">Login</a>
+<a class="btn primary" href="/signup/signup.html">Sign up</a>
     </div>
   </header>
 
   <main class="container">
 
-    <!-- Hero -->
+    
     <div class="contact-hero">
       <span class="eyebrow">Get in touch</span>
       <h1 class="h1">Have a question or idea? Let's talk.</h1>
       <p class="p">Whether it's feedback, a bug report, or just a suggestion — fill out the form and I'll get back to you as soon as possible.</p>
     </div>
 
-    <!-- Grid -->
+   
     <div class="contact-grid">
 
-      <!-- Form -->
+      
       <div class="form-card">
         <h2>Send a message</h2>
         <form id="contactForm">
@@ -286,7 +285,7 @@
         </form>
       </div>
 
-      <!-- Side -->
+      
       <div class="side-cards">
 
         <div class="side-card">
@@ -329,7 +328,7 @@
         return;
       }
 
-      // simulare trimitere (înlocuiește cu fetch real dacă adaugi backend pentru contact)
+      
       btn.disabled    = true;
       btn.textContent = "Sending...";
 
