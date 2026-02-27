@@ -1,10 +1,10 @@
 const express = require("express");
-const path    = require("path");
-const bcrypt  = require("bcrypt");
+const path = require("path");
+const bcrypt = require("bcrypt");
 const session = require("express-session");
-const db      = require("./db");
+const db = require("./db");
 
-const app  = express();
+const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ── Middleware ───────────────────────────────────────────────────
@@ -15,25 +15,25 @@ app.use(express.urlencoded({ extended: true }));
 const MemoryStore = require("memorystore")(session);
 
 app.use(session({
-  secret:            process.env.SESSION_SECRET || "psm_secret_dev",
-  resave:            false,
+  secret: process.env.SESSION_SECRET || "psm_secret_dev",
+  resave: false,
   saveUninitialized: false,
   store: new MemoryStore({
     checkPeriod: 86400000
   }),
   cookie: {
     httpOnly: true,
-    secure:   process.env.NODE_ENV === "production",
-    maxAge:   1000 * 60 * 60 * 24,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 1000 * 60 * 60 * 24,
   },
 }));
 
 // ── Fișiere statice ──────────────────────────────────────────────
 
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/login",   express.static(path.join(__dirname, "login")));
-app.use("/signup",  express.static(path.join(__dirname, "signup")));
-app.use("/about",   express.static(path.join(__dirname, "about")));
+app.use("/login", express.static(path.join(__dirname, "login")));
+app.use("/signup", express.static(path.join(__dirname, "signup")));
+app.use("/about", express.static(path.join(__dirname, "about")));
 app.use("/contact", express.static(path.join(__dirname, "contact")));
 
 // ── Rute pagini ──────────────────────────────────────────────────
@@ -63,17 +63,17 @@ app.get("/signup", (req, res) => {
 function estimateStrength(password) {
   const p = String(password || "");
 
-  const hasLower  = /[a-z]/.test(p);
-  const hasUpper  = /[A-Z]/.test(p);
-  const hasDigit  = /\d/.test(p);
+  const hasLower = /[a-z]/.test(p);
+  const hasUpper = /[A-Z]/.test(p);
+  const hasDigit = /\d/.test(p);
   const hasSymbol = /[^A-Za-z0-9]/.test(p);
 
   let score = 0;
-  if (p.length >= 8)          score++;
-  if (p.length >= 12)         score++;
-  if (hasLower && hasUpper)   score++;
-  if (hasDigit)               score++;
-  if (hasSymbol)              score++;
+  if (p.length >= 8) score++;
+  if (p.length >= 12) score++;
+  if (hasLower && hasUpper) score++;
+  if (hasDigit) score++;
+  if (hasSymbol) score++;
   if (score > 4) score = 4;
 
   return {
@@ -129,7 +129,7 @@ app.post("/api/signup", async (req, res) => {
     );
 
     req.session.userId = result.insertId;
-    req.session.nume   = nume.trim();
+    req.session.nume = nume.trim();
 
     return res.json({ ok: true, message: "Cont creat." });
 
@@ -166,7 +166,7 @@ app.post("/api/login", async (req, res) => {
     }
 
     req.session.userId = user.id;
-    req.session.nume   = user.nume;
+    req.session.nume = user.nume;
 
     return res.json({ ok: true, message: `Salut, ${user.nume} ${user.prenume}.` });
 
@@ -212,13 +212,21 @@ app.get("/api/me", async (req, res) => {
 
 // ── Admin (la sfârșit, după toate rutele principale) ─────────────
 
+// Middleware: require login for admin API
+function requireAuth(req, res, next) {
+  if (!req.session.userId) {
+    return res.status(401).json({ ok: false, message: "Neautentificat." });
+  }
+  next();
+}
+
 app.use("/admin", express.static(path.join(__dirname, "admin")));
 
 app.get("/admin", (req, res) => {
   res.sendFile(path.join(__dirname, "admin", "index.html"));
 });
 
-app.get("/api/admin/users", async (req, res) => {
+app.get("/api/admin/users", requireAuth, async (req, res) => {
   try {
     const [rows] = await db.execute(
       "SELECT id, nume, prenume, email, created_at FROM users ORDER BY created_at DESC"
@@ -230,7 +238,7 @@ app.get("/api/admin/users", async (req, res) => {
   }
 });
 
-app.delete("/api/admin/users/:id", async (req, res) => {
+app.delete("/api/admin/users/:id", requireAuth, async (req, res) => {
   const { id } = req.params;
 
   if (!id || isNaN(id)) {

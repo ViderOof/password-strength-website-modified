@@ -1,31 +1,40 @@
 <!DOCTYPE html>
 <html lang="ro">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Admin — PSM</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
   <style>
     :root {
-      --bg:      #070a14;
-      --bg2:     #0b1022;
-      --panel:   rgba(255,255,255,0.055);
-      --border:  rgba(255,255,255,0.10);
-      --text:    rgba(255,255,255,0.92);
-      --muted:   rgba(255,255,255,0.55);
-      --brand:   #7c5cff;
-      --green:   #22c55e;
-      --red:     #ef4444;
-      --radius:  16px;
+      --bg: #070a14;
+      --bg2: #0b1022;
+      --panel: rgba(255, 255, 255, 0.055);
+      --border: rgba(255, 255, 255, 0.10);
+      --text: rgba(255, 255, 255, 0.92);
+      --muted: rgba(255, 255, 255, 0.55);
+      --brand: #7c5cff;
+      --green: #22c55e;
+      --red: #ef4444;
+      --radius: 16px;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       font-family: 'DM Sans', sans-serif;
       background:
-        radial-gradient(ellipse 900px 500px at 10% 0%, rgba(124,92,255,0.18), transparent 60%),
-        radial-gradient(ellipse 600px 400px at 90% 10%, rgba(34,197,94,0.10), transparent 55%),
+        radial-gradient(ellipse 900px 500px at 10% 0%, rgba(124, 92, 255, 0.18), transparent 60%),
+        radial-gradient(ellipse 600px 400px at 90% 10%, rgba(34, 197, 94, 0.10), transparent 55%),
         linear-gradient(175deg, #0d1226, var(--bg));
       min-height: 100vh;
       color: var(--text);
@@ -37,17 +46,21 @@
       top: 0;
       z-index: 50;
       backdrop-filter: blur(20px);
-      background: rgba(7,10,20,0.72);
+      background: rgba(7, 10, 20, 0.72);
       border-bottom: 1px solid var(--border);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     }
+
     .nav::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0;
+      top: 0;
+      left: 0;
+      right: 0;
       height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(124,92,255,0.7) 30%, rgba(34,197,94,0.5) 70%, transparent);
+      background: linear-gradient(90deg, transparent, rgba(124, 92, 255, 0.7) 30%, rgba(34, 197, 94, 0.5) 70%, transparent);
     }
+
     .nav-inner {
       max-width: 1200px;
       margin: 0 auto;
@@ -56,24 +69,26 @@
       align-items: center;
       justify-content: space-between;
     }
+
     .brand {
       font-weight: 800;
       font-size: 15px;
       letter-spacing: 1.5px;
       text-transform: uppercase;
-      background: linear-gradient(135deg, #fff, rgba(180,160,255,0.9));
+      background: linear-gradient(135deg, #fff, rgba(180, 160, 255, 0.9));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
+
     .nav-badge {
       font-size: 10px;
       font-weight: 600;
-      color: rgba(124,92,255,0.9);
-      border: 1px solid rgba(124,92,255,0.35);
+      color: rgba(124, 92, 255, 0.9);
+      border: 1px solid rgba(124, 92, 255, 0.35);
       padding: 3px 10px;
       border-radius: 999px;
-      background: rgba(124,92,255,0.10);
+      background: rgba(124, 92, 255, 0.10);
       letter-spacing: 0.6px;
       text-transform: uppercase;
     }
@@ -92,6 +107,7 @@
       gap: 16px;
       margin-bottom: 28px;
     }
+
     .stat-card {
       background: var(--panel);
       border: 1px solid var(--border);
@@ -99,10 +115,12 @@
       padding: 22px 24px;
       transition: border-color 150ms ease, transform 150ms ease;
     }
+
     .stat-card:hover {
-      border-color: rgba(255,255,255,0.18);
+      border-color: rgba(255, 255, 255, 0.18);
       transform: translateY(-2px);
     }
+
     .stat-label {
       font-size: 12px;
       font-weight: 600;
@@ -111,11 +129,12 @@
       color: var(--muted);
       margin-bottom: 10px;
     }
+
     .stat-value {
       font-size: 36px;
       font-weight: 800;
       letter-spacing: -1px;
-      background: linear-gradient(135deg, #fff, rgba(180,160,255,0.8));
+      background: linear-gradient(135deg, #fff, rgba(180, 160, 255, 0.8));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -129,10 +148,12 @@
       gap: 12px;
       margin-bottom: 16px;
     }
+
     .search-wrap {
       position: relative;
       flex: 1;
     }
+
     .search-icon {
       position: absolute;
       left: 14px;
@@ -142,28 +163,34 @@
       font-size: 14px;
       pointer-events: none;
     }
+
     .search-input {
       width: 100%;
       padding: 11px 14px 11px 40px;
       border-radius: 12px;
       border: 1px solid var(--border);
-      background: rgba(255,255,255,0.04);
+      background: rgba(255, 255, 255, 0.04);
       color: var(--text);
       font-family: 'DM Sans', sans-serif;
       font-size: 14px;
       outline: none;
       transition: border-color 150ms ease, box-shadow 150ms ease;
     }
-    .search-input::placeholder { color: var(--muted); }
-    .search-input:focus {
-      border-color: rgba(124,92,255,0.6);
-      box-shadow: 0 0 0 3px rgba(124,92,255,0.14);
+
+    .search-input::placeholder {
+      color: var(--muted);
     }
+
+    .search-input:focus {
+      border-color: rgba(124, 92, 255, 0.6);
+      box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.14);
+    }
+
     .btn-refresh {
       padding: 11px 18px;
       border-radius: 12px;
       border: 1px solid var(--border);
-      background: rgba(255,255,255,0.05);
+      background: rgba(255, 255, 255, 0.05);
       color: var(--text);
       font-family: 'DM Sans', sans-serif;
       font-size: 13px;
@@ -172,9 +199,10 @@
       transition: background 120ms ease, border-color 120ms ease;
       white-space: nowrap;
     }
+
     .btn-refresh:hover {
-      background: rgba(255,255,255,0.09);
-      border-color: rgba(255,255,255,0.18);
+      background: rgba(255, 255, 255, 0.09);
+      border-color: rgba(255, 255, 255, 0.18);
     }
 
     /* ── Table ── */
@@ -184,14 +212,17 @@
       border-radius: var(--radius);
       overflow: hidden;
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
     }
+
     thead {
-      background: rgba(255,255,255,0.04);
+      background: rgba(255, 255, 255, 0.04);
       border-bottom: 1px solid var(--border);
     }
+
     th {
       padding: 13px 20px;
       text-align: left;
@@ -201,29 +232,39 @@
       text-transform: uppercase;
       color: var(--muted);
     }
+
     td {
       padding: 14px 20px;
       font-size: 14px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       vertical-align: middle;
     }
-    tr:last-child td { border-bottom: none; }
-    tr:hover td { background: rgba(255,255,255,0.025); }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.025);
+    }
 
     .td-mono {
       font-family: 'DM Mono', monospace;
       font-size: 13px;
       color: var(--muted);
     }
-    .td-name { font-weight: 600; }
+
+    .td-name {
+      font-weight: 600;
+    }
 
     /* avatar inițiale */
     .avatar {
       width: 34px;
       height: 34px;
       border-radius: 999px;
-      background: linear-gradient(135deg, rgba(124,92,255,0.6), rgba(34,197,94,0.4));
-      border: 1px solid rgba(255,255,255,0.12);
+      background: linear-gradient(135deg, rgba(124, 92, 255, 0.6), rgba(34, 197, 94, 0.4));
+      border: 1px solid rgba(255, 255, 255, 0.12);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -231,6 +272,7 @@
       font-weight: 700;
       flex-shrink: 0;
     }
+
     .td-user {
       display: flex;
       align-items: center;
@@ -241,18 +283,19 @@
     .btn-delete {
       padding: 6px 14px;
       border-radius: 8px;
-      border: 1px solid rgba(239,68,68,0.30);
-      background: rgba(239,68,68,0.08);
-      color: rgba(239,68,68,0.85);
+      border: 1px solid rgba(239, 68, 68, 0.30);
+      background: rgba(239, 68, 68, 0.08);
+      color: rgba(239, 68, 68, 0.85);
       font-family: 'DM Sans', sans-serif;
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
       transition: background 120ms ease, border-color 120ms ease;
     }
+
     .btn-delete:hover {
-      background: rgba(239,68,68,0.18);
-      border-color: rgba(239,68,68,0.55);
+      background: rgba(239, 68, 68, 0.18);
+      border-color: rgba(239, 68, 68, 0.55);
     }
 
     /* empty / loading state */
@@ -279,27 +322,37 @@
       pointer-events: none;
       z-index: 999;
     }
+
     .toast.show {
       opacity: 1;
       transform: translateY(0);
     }
+
     .toast.success {
-      background: rgba(34,197,94,0.12);
-      border-color: rgba(34,197,94,0.35);
-      color: rgba(34,197,94,0.95);
+      background: rgba(34, 197, 94, 0.12);
+      border-color: rgba(34, 197, 94, 0.35);
+      color: rgba(34, 197, 94, 0.95);
     }
+
     .toast.error {
-      background: rgba(239,68,68,0.12);
-      border-color: rgba(239,68,68,0.35);
-      color: rgba(239,68,68,0.95);
+      background: rgba(239, 68, 68, 0.12);
+      border-color: rgba(239, 68, 68, 0.35);
+      color: rgba(239, 68, 68, 0.95);
     }
 
     @media (max-width: 768px) {
-      .stats-row { grid-template-columns: 1fr; }
-      th:nth-child(3), td:nth-child(3) { display: none; }
+      .stats-row {
+        grid-template-columns: 1fr;
+      }
+
+      th:nth-child(3),
+      td:nth-child(3) {
+        display: none;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <header class="nav">
@@ -331,12 +384,7 @@
     <div class="toolbar">
       <div class="search-wrap">
         <span class="search-icon">🔍</span>
-        <input
-          id="searchInput"
-          class="search-input"
-          type="text"
-          placeholder="Caută după nume sau email..."
-        />
+        <input id="searchInput" class="search-input" type="text" placeholder="Caută după nume sau email..." />
       </div>
       <button class="btn-refresh" onclick="loadUsers()">↻ Refresh</button>
     </div>
@@ -353,7 +401,9 @@
           </tr>
         </thead>
         <tbody id="usersTable">
-          <tr><td colspan="4" class="state-msg">Se încarcă...</td></tr>
+          <tr>
+            <td colspan="4" class="state-msg">Se încarcă...</td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -377,7 +427,7 @@
     // ── Fetch utilizatori ────────────────────────────────────────
     async function loadUsers() {
       try {
-        const res  = await fetch("/api/admin/users");
+        const res = await fetch("/api/admin/users");
         const data = await res.json();
 
         if (!data.ok) throw new Error(data.message);
@@ -419,7 +469,7 @@
 
       tbody.innerHTML = users.map(u => {
         const initials = (u.nume[0] || "?").toUpperCase() + (u.prenume[0] || "").toUpperCase();
-        const date     = new Date(u.created_at).toLocaleDateString("ro-RO", {
+        const date = new Date(u.created_at).toLocaleDateString("ro-RO", {
           day: "2-digit", month: "short", year: "numeric",
           hour: "2-digit", minute: "2-digit"
         });
@@ -462,7 +512,7 @@
       if (!confirm(`Ștergi utilizatorul ${email}? Această acțiune este ireversibilă.`)) return;
 
       try {
-        const res  = await fetch(`/api/admin/users/${id}`, { method: "DELETE" });
+        const res = await fetch(`/api/admin/users/${id}`, { method: "DELETE" });
         const data = await res.json();
 
         if (!data.ok) throw new Error(data.message);
@@ -479,7 +529,7 @@
     function showToast(msg, type = "success") {
       const toast = document.getElementById("toast");
       toast.textContent = msg;
-      toast.className   = `toast ${type} show`;
+      toast.className = `toast ${type} show`;
       setTimeout(() => { toast.className = `toast ${type}`; }, 3000);
     }
 
@@ -491,8 +541,7 @@
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;");
     }
-  </scrip>
-    </body>
-    </html>
+  </script>
 </body>
+
 </html>
