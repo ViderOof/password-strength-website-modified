@@ -28,3 +28,16 @@ pool.getConnection()
   });
 
 module.exports = pool;
+pool.getConnection()
+  .then(conn => {
+    console.log("✅ MySQL conectat cu succes");
+    conn.release();
+  })
+  .catch(err => {
+    console.error("❌ Eroare conexiune MySQL:", err.message);
+    console.error("   Host:", process.env.DB_HOST);
+    console.error("   Port:", process.env.DB_PORT);
+    console.error("   User:", process.env.DB_USER);
+    console.error("   DB:  ", process.env.DB_NAME);
+    process.exit(1);
+  });
