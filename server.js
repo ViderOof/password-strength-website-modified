@@ -17,6 +17,21 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/login",  express.static(path.join(__dirname, "login")));
 app.use("/signup", express.static(path.join(__dirname, "signup")));
 
+const MemoryStore = require("memorystore")(session);
+
+app.use(session({
+  secret:            process.env.SESSION_SECRET || "psm_secret_dev",
+  resave:            false,
+  saveUninitialized: false,
+  store: new MemoryStore({
+    checkPeriod: 86400000  // curăță sesiunile expirate la fiecare 24h
+  }),
+  cookie: {
+    httpOnly: true,
+    secure:   process.env.NODE_ENV === "production",
+    maxAge:   1000 * 60 * 60 * 24,
+  },
+}));
 // Sesiuni
 app.use(session({
   secret:            process.env.SESSION_SECRET || "psm_secret_dev",
