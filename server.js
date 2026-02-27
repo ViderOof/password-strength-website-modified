@@ -14,8 +14,6 @@ app.use(express.urlencoded({ extended: true }));
 
 const MemoryStore = require("memorystore")(session);
 
-// Tust proxy este necesar pe platforme ca Railway (unde aplicația e în spatele unui proxy)
-// Altfel, setarea `secure: true` pentru cookie va face ca sesiunea să eșueze.
 app.set("trust proxy", 1);
 
 app.use(session({
