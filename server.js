@@ -5,24 +5,15 @@ const session = require("express-session");
 const db      = require("./db");
 
 const app  = express();
-const PORT = process.env.PORT || 3000; // ✅ FIX: Railway injectează process.env.PORT
+const PORT = process.env.PORT || 3000;
 
 // ── Middleware ───────────────────────────────────────────────────
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Fișiere statice
-app.use(express.static(path.join(__dirname, "public")));
-app.use("/login",   express.static(path.join(__dirname, "login")));
-app.use("/signup",  express.static(path.join(__dirname, "signup")));
-app.use("/about",   express.static(path.join(__dirname, "about")));
-app.use("/contact", express.static(path.join(__dirname, "contact")));
-app.use("/admin",   express.static(path.join(__dirname, "admin")));
-
 const MemoryStore = require("memorystore")(session);
 
-// ✅ FIX: O singură inițializare de session (erau două înainte!)
 app.use(session({
   secret:            process.env.SESSION_SECRET || "psm_secret_dev",
   resave:            false,
@@ -37,13 +28,20 @@ app.use(session({
   },
 }));
 
+// ── Fișiere statice ──────────────────────────────────────────────
+
+app.use(express.static(path.join(__dirname, "public")));
+app.use("/login",   express.static(path.join(__dirname, "login")));
+app.use("/signup",  express.static(path.join(__dirname, "signup")));
+app.use("/about",   express.static(path.join(__dirname, "about")));
+app.use("/contact", express.static(path.join(__dirname, "contact")));
+
 // ── Rute pagini ──────────────────────────────────────────────────
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// ✅ FIX: Rute explicite pentru about, contact, login, signup
 app.get("/about", (req, res) => {
   res.sendFile(path.join(__dirname, "about", "about.html"));
 });
@@ -58,10 +56,6 @@ app.get("/login", (req, res) => {
 
 app.get("/signup", (req, res) => {
   res.sendFile(path.join(__dirname, "signup", "signup.html"));
-});
-
-app.get("/admin", (req, res) => {
-  res.sendFile(path.join(__dirname, "admin", "index.html"));
 });
 
 // ── Helper: estimare strength ────────────────────────────────────
@@ -216,7 +210,13 @@ app.get("/api/me", async (req, res) => {
   }
 });
 
-// ── API: GET /api/admin/users ────────────────────────────────────
+// ── Admin (la sfârșit, după toate rutele principale) ─────────────
+
+app.use("/admin", express.static(path.join(__dirname, "admin")));
+
+app.get("/admin", (req, res) => {
+  res.sendFile(path.join(__dirname, "admin", "index.html"));
+});
 
 app.get("/api/admin/users", async (req, res) => {
   try {
@@ -229,8 +229,6 @@ app.get("/api/admin/users", async (req, res) => {
     res.status(500).json({ ok: false, message: "Eroare la citirea utilizatorilor." });
   }
 });
-
-// ── API: DELETE /api/admin/users/:id ────────────────────────────
 
 app.delete("/api/admin/users/:id", async (req, res) => {
   const { id } = req.params;
