@@ -29,26 +29,26 @@ pool.getConnection()
   });
 
 const createUsersTable = `
-  CREATE TABLE IF NOT EXISTS users (
-    id            INT UNSIGNED  NOT NULL AUTO_INCREMENT,
-    nume          VARCHAR(100)  NOT NULL,
-    prenume       VARCHAR(100)  NOT NULL,
-    email         VARCHAR(255)  NOT NULL,
-    password_hash VARCHAR(255)  NOT NULL,
-    created_at    DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CREATE TABLE IF NOT EXISTS users (
+      id            INT UNSIGNED  NOT NULL AUTO_INCREMENT,
+      nume          VARCHAR(100)  NOT NULL,
+      prenume       VARCHAR(100)  NOT NULL,
+      email         VARCHAR(255)  NOT NULL,
+      password_hash VARCHAR(255)  NOT NULL,
+      created_at    DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    PRIMARY KEY (id),
-    UNIQUE KEY uq_email (email)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-  `;
+      PRIMARY KEY (id),
+      UNIQUE KEY uq_email (email)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    `;
 
 // Run the query automatically when the server starts
-pool.query(createUsersTable, (err, results) => {
-  if (err) {
-    console.error("❌ Eroare la crearea tabelului 'users':", err);
-  } else {
+pool.query(createUsersTable)
+  .then(() => {
     console.log("✅ Tabelul 'users' este pregătit (creat sau exista deja).");
-  }
-});
+  })
+  .catch((err) => {
+    console.error("❌ Eroare la crearea tabelului 'users':", err);
+  });
 
 module.exports = pool;
