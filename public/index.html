@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Password Strength Manager</title>
+  <link rel="stylesheet" href="style-base.css" />
+  <link rel="stylesheet" href="style-home.css" />
+  <script src="strength.js" defer></script>
+</head>
+<body>
+
+  <header class="nav">
+    <div class="container nav-inner">
+      <div class="brand">
+        <span>PSC</span>
+        <span class="badge">@n0rby90</span>
+      </div>
+      <nav class="nav-links">
+        <a class="btn ghost" href="/">Home</a>
+        <a class="btn ghost" href="about/index.html">About</a>
+        <a class="btn ghost" href="contact/index.html">Contact</a>
+        <a class="btn" href="login/index.html">Login</a>
+        <a class="btn primary" href="signup/index.html">Sign up</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-left">
+        <h1 class="h1">Your password is the first line of defense. Make it unbreakable.</h1>
+        <p class="p" style="margin-top: 12px;">
+          Hackers don't guess — they attack automatically. A single script can test millions of passwords per second. Find out how safe you really are.
+        </p>
+
+        <div class="hero-cta">
+          <a class="btn primary" href="signup/index.html">Creează cont</a>
+          <a class="btn" href="login/index.html">Intră</a>
+        </div>
+
+        <div class="stats panel">
+          <div class="stat">
+            <div class="stat-n">80%</div>
+            <div class="stat-p">of breaches start with a weak password. Your score shows exactly where you stand and what needs to change.</div>
+          </div>
+          <div class="stat">
+            <div class="stat-n">Test your password today</div>
+            <div class="stat-p">Test your password before someone else does it for you.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-right panel">
+        <h2 class="h2">Password checker</h2>
+        <p class="p" style="margin-top: 6px;">Write your password below to see how strong it is.</p>
+
+        <label class="label" for="pwCheck">Type your password</label>
+        <input id="pwCheck" class="input" type="password" placeholder="Ex: jda#67JDAOIWNdai#" autocomplete="new-password" />
+
+        <div class="meter">
+          <div id="bar" class="bar"></div>
+        </div>
+
+        <div class="row">
+          <span id="label" class="pill">-</span>
+          <span id="crackTime" class="crack-time">—</span>
+        </div>
+
+        <ul class="rules">
+          <li id="rLen">At least 12 characters</li>
+          <li id="rLow">Lowercase letters</li>
+          <li id="rUp">Uppercase letters</li>
+          <li id="rDig">Digits</li>
+          <li id="rSym">Symbols</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="features">
+      <div class="panel feature">
+        <h3 class="h2">Clear Score</h3>
+        <p class="p" style="margin-top: 6px;">A strong password isn't hard to remember — it's hard to guess. Length and character variety make the real difference.</p>
+      </div>
+      <div class="panel feature">
+        <h3 class="h2">Every account you own is a target</h3>
+        <p class="p" style="margin-top: 6px;">Most people don't find out until it's too late.</p>
+      </div>
+      <div class="panel feature">
+        <h3 class="h2">Let us take care of your passwords</h3>
+        <p class="p" style="margin-top: 6px;">Your passwords are never stored in plain text. We use bcrypt — even if someone reaches the database, they'll find nothing useful.</p>
+      </div>
+    </section>
+
+    <footer style="margin-top: 18px; color: var(--muted); font-size: 12px; text-align:center;">
+      © 2026 n0rby90. All rights reserved.
+    </footer>
+  </main>
+
+</body>
+</html>
