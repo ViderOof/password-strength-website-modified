@@ -5,7 +5,7 @@ const session = require("express-session");
 const db      = require("./db");
 
 const app  = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000; // ✅ FIX: Railway injectează process.env.PORT
 
 // ── Middleware ───────────────────────────────────────────────────
 
@@ -14,17 +14,21 @@ app.use(express.urlencoded({ extended: true }));
 
 // Fișiere statice
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/login",  express.static(path.join(__dirname, "login")));
-app.use("/signup", express.static(path.join(__dirname, "signup")));
+app.use("/login",   express.static(path.join(__dirname, "login")));
+app.use("/signup",  express.static(path.join(__dirname, "signup")));
+app.use("/about",   express.static(path.join(__dirname, "about")));
+app.use("/contact", express.static(path.join(__dirname, "contact")));
+app.use("/admin",   express.static(path.join(__dirname, "admin")));
 
 const MemoryStore = require("memorystore")(session);
 
+// ✅ FIX: O singură inițializare de session (erau două înainte!)
 app.use(session({
   secret:            process.env.SESSION_SECRET || "psm_secret_dev",
   resave:            false,
   saveUninitialized: false,
   store: new MemoryStore({
-    checkPeriod: 86400000  // curăță sesiunile expirate la fiecare 24h
+    checkPeriod: 86400000
   }),
   cookie: {
     httpOnly: true,
@@ -32,22 +36,32 @@ app.use(session({
     maxAge:   1000 * 60 * 60 * 24,
   },
 }));
-// Sesiuni
-app.use(session({
-  secret:            process.env.SESSION_SECRET || "psm_secret_dev",
-  resave:            false,
-  saveUninitialized: false,
-  cookie: {
-    httpOnly: true,
-    secure:   false,   // pune true când ai HTTPS
-    maxAge:   1000 * 60 * 60 * 24,  // 24 ore
-  },
-}));
 
-// ── Rute statice ─────────────────────────────────────────────────
+// ── Rute pagini ──────────────────────────────────────────────────
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+// ✅ FIX: Rute explicite pentru about, contact, login, signup
+app.get("/about", (req, res) => {
+  res.sendFile(path.join(__dirname, "about", "about.html"));
+});
+
+app.get("/contact", (req, res) => {
+  res.sendFile(path.join(__dirname, "contact", "contact.html"));
+});
+
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "login", "login.html"));
+});
+
+app.get("/signup", (req, res) => {
+  res.sendFile(path.join(__dirname, "signup", "signup.html"));
+});
+
+app.get("/admin", (req, res) => {
+  res.sendFile(path.join(__dirname, "admin", "index.html"));
 });
 
 // ── Helper: estimare strength ────────────────────────────────────
@@ -87,18 +101,15 @@ app.post("/api/strength", (req, res) => {
 });
 
 // ── API: POST /api/signup ────────────────────────────────────────
-//  Body: { nume, prenume, email, parola }
 
 app.post("/api/signup", async (req, res) => {
   try {
     const { nume, prenume, email, parola } = req.body;
 
-    // 1. câmpuri obligatorii
     if (!nume || !prenume || !email || !parola) {
       return res.status(400).json({ ok: false, message: "Completează toate câmpurile." });
     }
 
-    // 2. parolă suficient de puternică
     const strength = estimateStrength(parola);
     if (strength.score < 3) {
       return res.status(400).json({
@@ -108,7 +119,6 @@ app.post("/api/signup", async (req, res) => {
       });
     }
 
-    // 3. email unic
     const [existing] = await db.execute(
       "SELECT id FROM users WHERE email = ? LIMIT 1",
       [email.toLowerCase()]
@@ -117,16 +127,13 @@ app.post("/api/signup", async (req, res) => {
       return res.status(409).json({ ok: false, message: "Email deja folosit." });
     }
 
-    // 4. hash parolă
     const passwordHash = await bcrypt.hash(parola, 10);
 
-    // 5. inserare în DB
     const [result] = await db.execute(
       "INSERT INTO users (nume, prenume, email, password_hash) VALUES (?, ?, ?, ?)",
       [nume.trim(), prenume.trim(), email.toLowerCase(), passwordHash]
     );
 
-    // 6. salvează sesiunea
     req.session.userId = result.insertId;
     req.session.nume   = nume.trim();
 
@@ -139,7 +146,6 @@ app.post("/api/signup", async (req, res) => {
 });
 
 // ── API: POST /api/login ─────────────────────────────────────────
-//  Body: { email, parola }
 
 app.post("/api/login", async (req, res) => {
   try {
@@ -149,7 +155,6 @@ app.post("/api/login", async (req, res) => {
       return res.status(400).json({ ok: false, message: "Completează email și parola." });
     }
 
-    // 1. găsește utilizatorul
     const [rows] = await db.execute(
       "SELECT id, nume, prenume, email, password_hash FROM users WHERE email = ? LIMIT 1",
       [email.toLowerCase()]
@@ -161,13 +166,11 @@ app.post("/api/login", async (req, res) => {
 
     const user = rows[0];
 
-    // 2. verifică parola
     const ok = await bcrypt.compare(parola, user.password_hash);
     if (!ok) {
       return res.status(401).json({ ok: false, message: "Email sau parola greșită." });
     }
 
-    // 3. salvează sesiunea
     req.session.userId = user.id;
     req.session.nume   = user.nume;
 
@@ -213,19 +216,7 @@ app.get("/api/me", async (req, res) => {
   }
 });
 
-// ── Pornire ──────────────────────────────────────────────────────
-
-// ── Admin: servește pagina ───────────────────────────────────────
-// Pune acest bloc ÎNAINTE de app.listen()
-
-app.use("/admin", express.static(path.join(__dirname, "admin")));
-
-app.get("/admin", (req, res) => {
-  res.sendFile(path.join(__dirname, "admin", "index.html"));
-});
-
 // ── API: GET /api/admin/users ────────────────────────────────────
-// returnează toți utilizatorii din DB
 
 app.get("/api/admin/users", async (req, res) => {
   try {
@@ -240,7 +231,6 @@ app.get("/api/admin/users", async (req, res) => {
 });
 
 // ── API: DELETE /api/admin/users/:id ────────────────────────────
-// șterge un utilizator după id
 
 app.delete("/api/admin/users/:id", async (req, res) => {
   const { id } = req.params;
@@ -266,9 +256,7 @@ app.delete("/api/admin/users/:id", async (req, res) => {
   }
 });
 
-app.use("/about",   express.static(path.join(__dirname, "about")));
-app.use("/contact", express.static(path.join(__dirname, "contact")));
-
+// ── Pornire ──────────────────────────────────────────────────────
 
 app.listen(PORT, () => {
   console.log(`🚀 Server pornit pe http://localhost:${PORT}`);
