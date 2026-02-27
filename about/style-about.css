@@ -1,9 +1,7 @@
-/* about.css — stiluri specifice paginii About */
-/* Necesită style-base.css încărcat înainte în <head> */
 
 main { padding: 60px 0 80px; }
 
-/* ── Hero ── */
+
 .about-hero {
   text-align: center;
   max-width: 680px;
@@ -39,7 +37,7 @@ main { padding: 60px 0 80px; }
   line-height: 1.7;
 }
 
-/* ── Section title ── */
+
 .section-title {
   font-size: 13px;
   font-weight: 700;
@@ -49,7 +47,7 @@ main { padding: 60px 0 80px; }
   margin-bottom: 20px;
 }
 
-/* ── Project description ── */
+
 .about-desc {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -91,7 +89,7 @@ main { padding: 60px 0 80px; }
   margin: 0;
 }
 
-/* ── Why passwords matter ── */
+
 .why-section {
   margin-bottom: 48px;
   animation: fadeUp 0.5s 0.2s cubic-bezier(0.4,0,0.2,1) both;
@@ -142,7 +140,7 @@ main { padding: 60px 0 80px; }
   margin: 0;
 }
 
-/* ── Quote block ── */
+
 .quote-block {
   margin: 0 auto 48px;
   max-width: 700px;
@@ -175,13 +173,13 @@ main { padding: 60px 0 80px; }
   font-style: normal;
 }
 
-/* ── Animations ── */
+
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Responsive ── */
+
 @media (max-width: 768px) {
   .about-desc  { grid-template-columns: 1fr; }
   .why-grid    { grid-template-columns: 1fr; }
